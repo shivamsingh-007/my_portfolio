@@ -1,0 +1,8 @@
+{
+  "name": "Shivam Singh Portfolio",
+  "description": "Professional portfolio for Shivam Singh, focusing on AI/ML, Cybersecurity, and Blockchain engineering.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
