@@ -73,7 +73,7 @@ const Home: React.FC = () => {
         <Stats github={data.githubUsername} leetcode={data.leetcodeUsername} />
         <Certificates certificates={data.certificates} />
         <Ambitions text={data.ambitions} />
-        <Contact />
+        <Contact data={data} />
       </main>
 
       <FloatingDock />

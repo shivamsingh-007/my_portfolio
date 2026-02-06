@@ -1,92 +1,151 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDown, Layers, Terminal, Shield } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowDown, Shield, Terminal, Cpu, Sparkles } from 'lucide-react';
 import { PortfolioData } from '../types';
-import ThreeScene from '../components/ThreeScene';
+import LightPillar from '../components/LightPillar';
+import SplitText from '../components/SplitText';
+import ProfileCard from '../components/ProfileCard';
 
 const Hero: React.FC<{ data: PortfolioData }> = ({ data }) => {
+  const { scrollYProgress } = useScroll();
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
   return (
-    <section id="intro" className="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
-      <ThreeScene />
-      
-      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="mb-8 flex items-center gap-3">
-             <div className="h-px w-12 bg-white/30" />
-             <span className="text-white/60 font-display tracked-formal text-[10px] font-bold">
-               ENGINEERING PRINCIPLES • SYSTEMS INTEGRITY
-             </span>
+    <section id="intro" className="relative min-h-screen overflow-hidden">
+      <LightPillar
+        topColor="#5227FF"
+        bottomColor="#FF9FFC"
+        intensity={1.2}
+        rotationSpeed={0.3}
+        glowAmount={0.002}
+        pillarWidth={3}
+        pillarHeight={0.4}
+        noiseIntensity={0.5}
+        pillarRotation={25}
+        interactive={false}
+        mixBlendMode="screen"
+        quality="high"
+      />
+
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ y: bgY, opacity: bgOpacity }}
+      >
+        <div className="absolute -top-24 -left-20 w-[420px] h-[420px] rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute top-10 right-0 w-[360px] h-[360px] rounded-full bg-fuchsia-500/10 blur-[120px]" />
+        <div className="absolute inset-0 grid-pattern opacity-10" />
+      </motion.div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Text Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center lg:text-left"
+          >
+          {/* Shivam Singh Title */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-6"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold tracking-wider">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 font-display">
+                SHIVAM SINGH
+              </span>
+            </h2>
+            <motion.div
+              animate={{
+                scaleX: [0.8, 1, 0.8],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="mt-2 h-1 w-32 mx-auto lg:mx-0 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 rounded-full"
+            />
+          </motion.div>
+
+          <div className="mb-8 inline-flex items-center gap-3 px-4 py-2 rounded-full glass border border-white/10">
+            <Sparkles size={14} className="text-cyan-300" />
+            <span className="text-[10px] tracked-formal font-bold text-white/60">SYSTEMS • SECURITY • AUTONOMY</span>
           </div>
-          
-          <h1 className="text-6xl md:text-9xl font-display font-black mb-8 leading-[0.85] tracking-tighter">
-            <span className="text-white">SHIVAM</span><br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-400 via-white to-slate-500 italic">SINGH</span>
+
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.9] tracking-tighter">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-purple-400">
+              <SplitText text="Shivam" delay={0.2} />
+            </span>
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-white to-slate-400 font-serif italic">
+              <SplitText text="Singh" delay={0.5} />
+            </span>
           </h1>
+          <p className="mt-6 text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+            {data.bio}
+          </p>
 
-          <div className="space-y-4 mb-12">
-            <p className="text-slate-400 text-lg md:text-xl max-w-lg text-formal font-medium leading-relaxed">
-              {data.bio}
-            </p>
-            <div className="flex flex-col gap-2 border-l-2 border-white/10 pl-6 py-2">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-white/80 font-bold flex items-center gap-2 font-cyber"><Layers size={12}/> Methodology over impulse</span>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold flex items-center gap-2 font-cyber"><Terminal size={12}/> Systematic execution</span>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-bold flex items-center gap-2 font-cyber"><Shield size={12}/> Operational Rigor</span>
-            </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 text-[10px] font-cyber uppercase tracking-[0.35em]">
+            <span className="px-4 py-2 glass border border-white/10 text-white/70 flex items-center gap-2">
+              <Shield size={12} /> Integrity First
+            </span>
+            <span className="px-4 py-2 glass border border-white/10 text-white/50 flex items-center gap-2">
+              <Terminal size={12} /> Systematic Execution
+            </span>
+            <span className="px-4 py-2 glass border border-white/10 text-white/60 flex items-center gap-2">
+              <Cpu size={12} /> Secure Intelligence
+            </span>
           </div>
 
-          <div className="flex flex-wrap gap-6">
-            <motion.a 
-              href="#projects"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-10 py-5 bg-white text-black font-bold rounded-full hover:shadow-[0_10px_40px_rgba(255,255,255,0.1)] transition-all flex items-center gap-2"
-            >
-              Technical Documentation
-            </motion.a>
-            <motion.a 
-              href={`mailto:${data.email}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-10 py-5 glass-premium text-white font-bold rounded-full hover:border-white/50 transition-all"
-            >
-              Professional Inquiry
-            </motion.a>
-          </div>
+          <motion.ul
+            initial="hidden"
+            whileInView="show"
+            variants={{
+              hidden: { opacity: 0 },
+              show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+            }}
+            className="mt-12 flex flex-wrap justify-center gap-3"
+          >
+            {data.skills.slice(0, 10).map((skill) => (
+              <motion.li
+                key={skill}
+                variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
+                className="px-3 py-1.5 text-[9px] uppercase tracking-[0.3em] font-cyber text-white/60 glass border border-white/10"
+              >
+                {skill}
+              </motion.li>
+            ))}
+          </motion.ul>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative hidden lg:block"
-        >
-          <div className="relative w-full max-w-[550px] aspect-[4/3] mx-auto">
-             <div className="absolute -top-10 -right-10 w-24 h-24 border-t-2 border-r-2 border-white/10 rounded-tr-3xl" />
-             <div className="absolute -bottom-10 -left-10 w-24 h-24 border-b-2 border-l-2 border-white/10 rounded-bl-3xl" />
-             <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-white/10 rounded-3xl blur-[80px]" />
-             
-             <div className="relative z-10 w-full h-full rounded-3xl overflow-hidden glass border border-white/10 group bg-[#0a0a0a]">
-                <img 
-                  src={data.profilePic} 
-                  alt={data.name}
-                  className="w-full h-full object-cover transition-opacity duration-700 opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="text-white/60 font-display font-bold text-xs tracked-formal">AUTHENTICATION: {data.name.toUpperCase().replace(' ', '_')}</p>
-                  <p className="text-white text-[10px] font-medium mt-1 uppercase font-cyber tracking-[0.4em] opacity-80">Designation: Strategic Systems Architect</p>
-                </div>
-             </div>
-          </div>
-        </motion.div>
+        {/* Right Side - Profile Card */}
+        <div className="flex justify-center lg:justify-end">
+          <ProfileCard
+            name="Shivam Singh"
+            title="Software Engineer"
+            handle="shivamsingh007"
+            status="Online"
+            contactText="Contact Me"
+            avatarUrl="/anime-samurai.jpg"
+            showUserInfo={false}
+            enableTilt={true}
+            enableMobileTilt={false}
+            onContactClick={() => window.location.href = '#contact'}
+            showIcon
+            showBehindGlow
+            behindGlowColor="rgba(125, 190, 255, 0.67)"
+            customInnerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
+          />
+        </div>
+      </div>
       </div>
 
-      <motion.div 
+      <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/20 flex flex-col items-center gap-2"

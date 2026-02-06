@@ -7,8 +7,9 @@ import { Menu, X, Terminal, Code, Cpu, Award, Zap, MessageSquare, Settings } fro
 const navItems = [
   { name: 'Intro', path: '/', icon: <Terminal size={18} />, hash: '#intro' },
   { name: 'Projects', path: '/', icon: <Cpu size={18} />, hash: '#projects' },
-  { name: 'Stats', path: '/', icon: <Zap size={18} />, hash: '#stats' },
+  { name: 'Metrics', path: '/', icon: <Zap size={18} />, hash: '#stats' },
   { name: 'Certs', path: '/', icon: <Award size={18} />, hash: '#certs' },
+  { name: 'Contact', path: '/', icon: <MessageSquare size={18} />, hash: '#contact' },
   { name: 'Admin', path: '/admin', icon: <Settings size={18} /> },
 ];
 

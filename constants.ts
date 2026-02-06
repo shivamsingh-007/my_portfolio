@@ -40,9 +40,41 @@ export const INITIAL_DATA: PortfolioData = {
       id: 'vdf-01',
       title: 'Synthetic Audio Analysis',
       description: 'Deep Learning architecture designed for the verification of acoustic authenticity. Utilizes MFCC feature extraction and CNN-based classification to detect sophisticated voice cloning attempts.',
-      githubUrl: 'https://github.com/shivamsingh-007',
+      githubUrl: 'https://github.com/shivamsingh-007/projects',
       imageUrl: 'https://images.unsplash.com/photo-1551710029-607e06bd45ff?q=80&w=2069&auto=format&fit=crop',
       techStack: ['TensorFlow', 'Python', 'Librosa', 'Flask', 'CNN']
+    },
+    {
+      id: 'eternal-01',
+      title: 'Eternal Self Alchemist',
+      description: 'Privacy-first AI digital legacy builder with encrypted knowledge vault, digital twin AI, portfolio generation, and alchemical backup system. Features 37 advanced capabilities including graph reasoning, trend intelligence, and multi-vault architecture.',
+      githubUrl: 'https://github.com/shivamsingh-007/Eternal-Self',
+      imageUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070&auto=format&fit=crop',
+      techStack: ['Python', 'PyTorch', 'NetworkX', 'Sentence-Transformers', 'FAISS', 'Flask']
+    },
+    {
+      id: 'img-gen-01',
+      title: 'AI Image Generator',
+      description: 'Production-ready web application using Stable Diffusion 2.1 for high-quality text-to-image generation. Features dark/light themes, real-time progress tracking, NSFW filtering, and optimized GPU/CPU performance.',
+      githubUrl: 'https://github.com/shivamsingh-007/projects',
+      imageUrl: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop',
+      techStack: ['Stable Diffusion', 'FastAPI', 'React', 'Docker', 'PyTorch']
+    },
+    {
+      id: 'otp-auth-01',
+      title: 'OTP Authenticator System',
+      description: 'Complete multi-channel OTP verification system with email and SMS delivery. Features JWT authentication, rate limiting, bcrypt password hashing, and real-time verification status with responsive UI.',
+      githubUrl: 'https://github.com/shivamsingh-007/projects',
+      imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=2070&auto=format&fit=crop',
+      techStack: ['Node.js', 'Express', 'MongoDB', 'React', 'Twilio', 'Nodemailer']
+    },
+    {
+      id: 'awsg-01',
+      title: 'AWSG Security Gateway',
+      description: 'Autonomous Web Security Gateway providing real-time protection against XSS, SQL injection, SSRF, and command injection. Zero dependencies, works completely offline with native browser APIs.',
+      githubUrl: 'https://github.com/shivamsingh-007/projects',
+      imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=2070&auto=format&fit=crop',
+      techStack: ['JavaScript', 'Web Crypto API', 'DOM Security', 'Zero Dependencies']
     }
   ],
   certificates: [

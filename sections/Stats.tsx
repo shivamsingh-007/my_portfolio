@@ -1,26 +1,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// Added Zap to the imports from lucide-react
-import { Github, Code2, Flame, Award, Cpu, Globe, Database, Shield, RefreshCw, Zap } from 'lucide-react';
+import { Github, Code2, Flame, Award, Cpu, Globe, Database, Shield, RefreshCw, Zap, AlertCircle } from 'lucide-react';
 import ChromaGrid from '../components/ChromaGrid';
+import SplitText from '../components/SplitText';
+import LightPillar from '../components/LightPillar';
+import LeetCodeCircle from '../components/LeetCodeCircle';
+import { useLeetCodeData } from '../hooks/useLeetCodeData';
 
-const StatCard = ({ icon: Icon, label, value, color, loading }: any) => (
+const StatCard = ({ icon: Icon, label, value, loading }: any) => (
   <motion.div
-    whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.05)' }}
-    className="glass p-8 rounded-[1.5rem] border border-white/5 flex items-center gap-8 transition-all group relative overflow-hidden"
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    whileHover={{ y: -4 }}
+    className="glass p-6 rounded-[1.25rem] border border-white/5 flex items-center gap-6 transition-all group"
   >
-    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-white/5 border border-white/10 group-hover:border-${color}-500/50 transition-colors`}>
-      <Icon size={24} className={`group-hover:text-${color}-400 transition-colors ${loading ? 'animate-pulse' : ''}`} />
+    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white bg-white/5 border border-white/10">
+      <Icon size={22} className={loading ? 'animate-pulse' : ''} />
     </div>
     <div>
       <p className="text-slate-500 text-[10px] tracked-formal mb-1 uppercase tracking-widest">{label}</p>
       <p className="text-3xl font-display font-black text-white">
-        {loading ? (
-          <span className="opacity-20 animate-pulse">---</span>
-        ) : (
-          value
-        )}
+        {loading ? <span className="opacity-20 animate-pulse">---</span> : value}
       </p>
     </div>
   </motion.div>
@@ -28,192 +30,164 @@ const StatCard = ({ icon: Icon, label, value, color, loading }: any) => (
 
 const Stats: React.FC<{ github: string; leetcode: string }> = ({ github, leetcode }) => {
   const [githubData, setGithubData] = useState<any>(null);
-  const [leetcodeData, setLeetcodeData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [githubLoading, setGithubLoading] = useState(true);
+  
+  // Use the custom LeetCode hook for live data
+  const { data: leetcodeData, loading: leetcodeLoading, error: leetcodeError, refetch } = useLeetCodeData(leetcode);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      setLoading(true);
+    const fetchGithubStats = async () => {
+      setGithubLoading(true);
       try {
-        // Fetch GitHub Stats
         const ghResponse = await fetch(`https://api.github.com/users/${github}`);
         const ghJson = await ghResponse.json();
-        
-        // Fetch LeetCode Stats (using a popular community API)
-        const lcResponse = await fetch(`https://leetcode-stats-api.herokuapp.com/${leetcode}`);
-        const lcJson = await lcResponse.json();
-
         setGithubData(ghJson);
-        setLeetcodeData(lcJson);
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error('Error fetching GitHub stats:', error);
       } finally {
-        setLoading(false);
+        setGithubLoading(false);
       }
     };
 
-    fetchStats();
-  }, [github, leetcode]);
+    fetchGithubStats();
+  }, [github]);
+
+  const isLoading = githubLoading || leetcodeLoading;
 
   return (
     <section id="stats" className="relative py-32 px-6 overflow-hidden bg-[#020202]">
-      <ChromaGrid opacity={0.1} />
-      
-      {/* Texture Layer */}
+      <LightPillar
+        topColor="#00d9ff"
+        bottomColor="#b026ff"
+        intensity={1}
+        rotationSpeed={0.4}
+        glowAmount={0.003}
+        pillarWidth={2.5}
+        pillarHeight={0.35}
+        noiseIntensity={0.6}
+        pillarRotation={20}
+        interactive={false}
+        mixBlendMode="screen"
+        quality="high"
+      />
+      <ChromaGrid opacity={0.05} />
       <div className="absolute inset-0 grid-pattern opacity-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-24">
-          <h2 className="text-5xl md:text-6xl font-display font-black text-white mb-6 uppercase tracking-widest">Live Metrics</h2>
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-6xl font-display font-black text-white mb-4 uppercase tracking-widest">
+            <SplitText text="Live Metrics" delay={0.1} />
+          </h2>
           <div className="flex justify-center items-center gap-4">
-            <div className="h-px w-8 bg-orange-500/30" />
+            <div className="h-px w-8 bg-cyan-500/30" />
             <p className="text-slate-500 font-display text-[10px] tracked-formal flex items-center gap-2">
-              <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+              <RefreshCw size={12} className={isLoading ? 'animate-spin' : ''} />
               Real-time Performance Synchronized
             </p>
-            <div className="h-px w-8 bg-orange-500/30" />
+            <div className="h-px w-8 bg-fuchsia-500/30" />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* GitHub Context */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
           <div className="space-y-10">
             <div className="flex items-center justify-between border-b border-white/5 pb-4">
               <div className="flex items-center gap-4">
                 <Github size={20} className="text-white" />
                 <h3 className="text-xl font-display font-black tracking-tight">GITHUB_PROTOCOL</h3>
               </div>
-              <a 
-                href={`https://github.com/${github}`} 
-                target="_blank" 
+              <a
+                href={`https://github.com/${github}`}
+                target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] font-mono text-orange-400 hover:underline"
+                className="text-[10px] font-mono text-cyan-400 hover:underline"
               >
                 @{github}
               </a>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <StatCard 
-                icon={Cpu} 
-                label="Public Repos" 
-                value={githubData?.public_repos || "0"} 
-                color="orange" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Globe} 
-                label="Followers" 
-                value={githubData?.followers || "0"} 
-                color="cyan" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Database} 
-                label="Gists" 
-                value={githubData?.public_gists || "0"} 
-                color="white" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Flame} 
-                label="Profile Vitality" 
-                value="Active" 
-                color="red" 
-                loading={loading} 
-              />
-            </div>
 
-            <div className="glass p-6 rounded-[1.5rem] border border-white/5">
-              <div className="flex justify-between items-center mb-6">
-                 <p className="text-[10px] tracked-formal text-slate-500">Contribution Heatmap</p>
-                 <div className="flex gap-1">
-                   {[1,2,3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-orange-500/40" />)}
-                 </div>
-              </div>
-              <div className="grid grid-cols-12 sm:grid-cols-24 gap-1.5">
-                {Array.from({ length: 48 }).map((_, i) => (
-                  <motion.div 
-                    key={i} 
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ delay: i * 0.01 }}
-                    className={`h-4 rounded-[2px] ${Math.random() > 0.3 ? 'bg-orange-500/40 shadow-[0_0_10px_rgba(249,115,22,0.2)]' : 'bg-white/5'}`} 
-                  />
-                ))}
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <StatCard icon={Cpu} label="Public Repos" value={githubData?.public_repos || '0'} loading={githubLoading} />
+              <StatCard icon={Globe} label="Followers" value={githubData?.followers || '0'} loading={githubLoading} />
+              <StatCard icon={Database} label="Gists" value={githubData?.public_gists || '0'} loading={githubLoading} />
+              <StatCard icon={Flame} label="Profile Vitality" value="Active" loading={githubLoading} />
             </div>
           </div>
 
-          {/* LeetCode Context */}
           <div className="space-y-10">
-             <div className="flex items-center justify-between border-b border-white/5 pb-4">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
               <div className="flex items-center gap-4">
                 <Shield size={20} className="text-white" />
                 <h3 className="text-xl font-display font-black tracking-tight">ALGORITHMIC_SHIELD</h3>
               </div>
-              <a 
-                href={`https://leetcode.com/${leetcode}`} 
-                target="_blank" 
+              <a
+                href={`https://leetcode.com/${leetcode}`}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-[10px] font-mono text-fuchsia-400 hover:underline"
               >
                 @{leetcode}
               </a>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <StatCard 
-                icon={Award} 
-                label="Total Solved" 
-                value={leetcodeData?.totalSolved || "0"} 
-                color="fuchsia" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Code2} 
-                label="Easy Resolved" 
-                value={leetcodeData?.easySolved || "0"} 
-                color="green" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Zap} 
-                label="Medium Resolved" 
-                value={leetcodeData?.mediumSolved || "0"} 
-                color="yellow" 
-                loading={loading} 
-              />
-              <StatCard 
-                icon={Shield} 
-                label="Hard Resolved" 
-                value={leetcodeData?.hardSolved || "0"} 
-                color="red" 
-                loading={loading} 
-              />
+
+            {/* Circular LeetCode Diagram */}
+            <div className="flex justify-center py-8">
+              {leetcodeError ? (
+                <div className="flex flex-col items-center gap-4 p-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 max-w-md">
+                  <AlertCircle size={32} className="text-yellow-400" />
+                  <div className="text-center">
+                    <p className="text-sm font-semibold text-yellow-300 mb-2">
+                      Live Data Unavailable
+                    </p>
+                    <p className="text-xs text-yellow-400/70 mb-4">
+                      Multiple fetch methods failed. Please check your internet connection or verify your username.
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={refetch}
+                      className="px-4 py-2 text-xs font-mono text-white bg-yellow-500/20 hover:bg-yellow-500/30 rounded-lg transition-colors flex items-center gap-2 border border-yellow-500/30"
+                    >
+                      <RefreshCw size={14} />
+                      Retry
+                    </button>
+                    <a
+                      href={`https://leetcode.com/${leetcode}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 text-xs font-mono text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10"
+                    >
+                      View Profile
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <LeetCodeCircle
+                  totalSolved={leetcodeData?.totalSolved || 0}
+                  easySolved={leetcodeData?.easySolved || 0}
+                  mediumSolved={leetcodeData?.mediumSolved || 0}
+                  hardSolved={leetcodeData?.hardSolved || 0}
+                  easyTotal={leetcodeData?.easyTotal}
+                  mediumTotal={leetcodeData?.mediumTotal}
+                  hardTotal={leetcodeData?.hardTotal}
+                  loading={leetcodeLoading}
+                />
+              )}
             </div>
 
-            <div className="glass p-6 rounded-[1.5rem] border border-white/5 h-[160px] flex flex-col">
-              <p className="text-[10px] tracked-formal text-slate-500 mb-auto">Algorithm Mastery Index</p>
-              <div className="flex items-end gap-3 h-full pb-2">
-                {[
-                  (leetcodeData?.easySolved / leetcodeData?.totalSolved) * 100 || 20,
-                  (leetcodeData?.mediumSolved / leetcodeData?.totalSolved) * 100 || 40,
-                  (leetcodeData?.hardSolved / leetcodeData?.totalSolved) * 100 || 10,
-                  80, 60, 90, 45, 70, 55, 100
-                ].map((h, i) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ height: 0 }}
-                    whileInView={{ height: `${Math.min(h, 100)}%` }}
-                    className={`flex-1 bg-gradient-to-t ${i < 3 ? 'from-orange-500 to-fuchsia-500' : 'from-white/5 to-white/10'} rounded-t-[4px] relative group`}
-                  >
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-white">
-                      {Math.round(h)}%
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+            {/* Additional Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <StatCard 
+                icon={Award} 
+                label="Acceptance" 
+                value={leetcodeData?.acceptanceRate ? leetcodeData.acceptanceRate.toFixed(1) + '%' : 'N/A'} 
+                loading={leetcodeLoading} 
+              />
+              <StatCard 
+                icon={Flame} 
+                label="Ranking" 
+                value={leetcodeData?.ranking ? leetcodeData.ranking.toLocaleString() : 'N/A'} 
+                loading={leetcodeLoading} 
+              />
             </div>
           </div>
         </div>
