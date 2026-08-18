@@ -15,7 +15,9 @@ A fully functional physics-based lanyard component with:
 - 🎮 **Draggable**: Click and drag the card
 - 🔗 **Rope Joints**: 4 connected rigid bodies create realistic rope
 - 🌊 **Gravity**: Card naturally hangs and swings
+
 - ✨ **Lighting**: Environment lighting with Lightformers
+
 - 📱 **Responsive**: Adjusts quality for mobile devices
 
 ### 3. **How to Add Your Anime Image**
